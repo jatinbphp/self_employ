@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\StripeBankInputs;
 use App\Models\StripeInputDetails;
 use App\Models\StripeSupportedCountry;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserBankAccount;
 use Illuminate\Http\Request;
@@ -43,6 +44,8 @@ class StripeController extends Controller
             }
             $data['bankStatus'] = $bankStatus;
             $data['isAccount'] = $isAccount;
+            $data['transactions'] = Transaction::where('user_id', $id)->whereYear('created_at', date('Y'))->orderBy('id', 'desc')->get();
+            $data['firstTransactionYear'] = Transaction::where('user_id', $id)->orderBy('created_at', 'asc')->selectRaw('YEAR(created_at) AS year')->value('year');
             return view('frontend.stripe.finances', $data);
         }else {
             Toastr::error('User is not exist', 'Error', ["positionClass" => "toast-top-right"]);
@@ -189,7 +192,8 @@ class StripeController extends Controller
         return $data;
     }
 
-    public function payout(Request $request){
+    public function payout(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'amount' => 'required',
         ]);
@@ -200,14 +204,14 @@ class StripeController extends Controller
 
         $user = Auth::user();
 
-        if($request['amount'] > $user['balance']){
+        if ($request['amount'] > $user['balance']) {
             $data['status'] = 0;
             $data['message'] = 'You have insufficient balance.';
-        }else{
-            $userBank = UserBankAccount::where('user_id',$user['id'])->first();
-            $country = StripeBankInputs::where('id',$userBank['country'])->first();
-            if(!empty($userBank)){
-                try{
+        } else {
+            $userBank = UserBankAccount::where('user_id', $user['id'])->first();
+            $country = StripeBankInputs::where('id', $userBank['country'])->first();
+            if (!empty($userBank)) {
+                try {
                     $sKey = env('STRIPE_SECRET');
                     Stripe::setApiKey($sKey);
                     $transfer = Transfer::create([
@@ -218,14 +222,43 @@ class StripeController extends Controller
                         'transfer_group' => 'Manually transfer to connect bank account',
                     ]);
                     return $transfer;
-                }catch(\Exception $e){
+                } catch (\Exception $e) {
                     return $e->getMessage();
                 }
-            }else{
+            } else {
                 $data['status'] = 0;
                 $data['message'] = 'Your bank account is not found';
             }
         }
+    }
+
+    public function filterTransactions(Request $request)
+    {
+        $data = [];
+        $data['status'] = 0;
+        $id = Auth::user()->id;
+        if(empty($request->paymentType) || empty($request->year) || empty($request->month) || !$id){
+            return $data;
+        }
+
+        $transactionCollection = Transaction::where('user_id', $id)
+            ->whereYear('created_at', $request->year);
+
+        if(in_array($request->paymentType, ['credit', 'debit'])){
+            $transactionCollection->where('payment_type', $request->paymentType);
+        }
+
+        if(in_array($request->month,  range(1, 12))){
+            $transactionCollection->whereMonth('created_at', $request->month);
+        }
+
+        $transactionData = $transactionCollection->orderBy('id', 'desc')->get();
+        $transaction['transactions'] = $transactionData;
+
+        $data['check'] = $transactionData;
+
+        $data['renderTransactions'] = view('frontend.stripe.transactions', $transaction)->render();
+        $data['status'] = 1;
 
         return $data;
     }
