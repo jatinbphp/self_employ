@@ -37,6 +37,7 @@ class PaymentController extends Controller
             Transaction::create([
                 'user_id' => Auth::user()->id,
                 'amount' =>  $request->deposit_amount,
+                'description' =>  'Fund Added',
                 'type' =>  'stripe',
                 'payment_type' =>  'credit',
             ]);
