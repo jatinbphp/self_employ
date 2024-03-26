@@ -366,9 +366,13 @@
                                                                                             $currentYear = \Carbon\Carbon::now()->year;
                                                                                         @endphp
                                                                                         <select class="form-select filter-select" id="year_filter">
-                                                                                            @for ($year = $currentYear; $year >= $firstTransactionYear; $year--)
-                                                                                                <option value="{{$year}}">{{ $year }}</option>
-                                                                                            @endfor
+                                                                                            @if(!empty($firstTransactionYear))
+                                                                                                @for ($year = $currentYear; $year >= $firstTransactionYear; $year--)
+                                                                                                    <option value="{{$year}}">{{ $year }}</option>
+                                                                                                @endfor
+                                                                                            @else
+                                                                                                <option value="{{$currentYear}}">{{ $currentYear }}</option>
+                                                                                            @endif
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
