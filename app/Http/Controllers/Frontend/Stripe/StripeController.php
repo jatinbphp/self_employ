@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\StripeBankInputs;
 use App\Models\StripeInputDetails;
 use App\Models\StripeSupportedCountry;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserBankAccount;
 use Illuminate\Http\Request;
@@ -39,6 +40,8 @@ class StripeController extends Controller
             }
             $data['bankStatus'] = $bankStatus;
             $data['isAccount'] = $isAccount;
+            $data['transactions'] = Transaction::where('user_id', $id)->whereYear('created_at', date('Y'))->orderBy('id', 'desc')->get();
+            $data['firstTransactionYear'] = Transaction::where('user_id', $id)->orderBy('created_at', 'asc')->selectRaw('YEAR(created_at) AS year')->value('year');
             return view('frontend.stripe.finances', $data);
         }else {
             Toastr::error('User is not exist', 'Error', ["positionClass" => "toast-top-right"]);
@@ -182,6 +185,37 @@ class StripeController extends Controller
             $data['status'] = 0;
             $data['message'] = 'Session timeout';
         }
+        return $data;
+    }
+
+    public function filterTransactions(Request $request)
+    {
+        $data = [];
+        $data['status'] = 0;
+        $id = Auth::user()->id;
+        if(empty($request->paymentType) || empty($request->year) || empty($request->month) || !$id){
+            return $data;
+        }
+
+        $transactionCollection = Transaction::where('user_id', $id)
+            ->whereYear('created_at', $request->year);
+
+        if(in_array($request->paymentType, ['credit', 'debit'])){
+            $transactionCollection->where('payment_type', $request->paymentType);
+        }
+
+        if(in_array($request->month,  range(1, 12))){
+            $transactionCollection->whereMonth('created_at', $request->month);
+        }
+
+        $transactionData = $transactionCollection->orderBy('id', 'desc')->get();
+        $transaction['transactions'] = $transactionData;
+
+        $data['check'] = $transactionData;
+
+        $data['renderTransactions'] = view('frontend.stripe.transactions', $transaction)->render();
+        $data['status'] = 1;
+
         return $data;
     }
 }
