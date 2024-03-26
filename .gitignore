@@ -1,0 +1,16 @@
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/public/assets/js/job.post.js
+/public/assets/js/job.post_BKP_LOCAL_19-2-2024.js
+/public/assets/js/job.post_JATINBHAI_1-3-2024_BKP.js
+!/storage/app/public/uploads/posts/post_images/post.jpg
+/public/uploads
+/vendor
+composer-lock
+package-lock.json
+/.vscode
+.env
+.env.example
+key.txt
