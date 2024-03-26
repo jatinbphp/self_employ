@@ -255,7 +255,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item">
+                                                    <a class="dropdown-item" href="{{route('stripe.finances')}}#withdraw">
                                                         Withdraw Funds
                                                     </a>
                                                 </li>

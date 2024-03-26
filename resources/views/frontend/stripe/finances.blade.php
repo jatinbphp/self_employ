@@ -6,6 +6,7 @@
                 <div class="nav profile-tb-btn1 flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <button class="bankAccount nav-link active " id="bankAccountTab" data-bs-toggle="pill" data-bs-target="#v-pills-bank-account" type="button" role="tab" aria-controls="v-pills-bank-account" aria-selected="true">Connect Bank Account</button>
                     <button class="bankAccount nav-link " id="depositTab" data-bs-toggle="pill" data-bs-target="#v-pills-deposit" type="button" role="tab" aria-controls="v-pills-bank-account" aria-selected="true">Deposit</button>
+                    <button class="bankAccount nav-link " id="withdrawTab" data-bs-toggle="pill" data-bs-target="#v-pills-withdraw" type="button" role="tab" aria-controls="v-pills-withdraw" aria-selected="true">Withdraw</button>
                 </div>
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-bank-account" role="tabpanel" aria-labelledby="bankAccountTab" tabindex="0">
@@ -290,6 +291,144 @@
                                                 </div>
                                             </div>
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="v-pills-withdraw" role="tabpanel" aria-labelledby="withdrawTab" tabindex="0">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="post-taskbx01">
+                                    <div class="profile-viewbx1">
+                                        <div class="container">
+                                            <div class="row">
+                                                <h3>Withdrawal</h3>
+                                                <div class="p-0 post-taskbx01 pricing-income-mainbx1">
+                                                    <div class="pricing-incomebx1 px-0">
+                                                        <ul>
+                                                            <li>
+                                                                <p>Net Income</p>
+                                                                <h4>$3,116.06</h4>
+                                                            </li>
+                                                            <li>
+                                                                <p>Withdrawn</p>
+                                                                <h4>$3,116.06</h4>
+                                                            </li>
+                                                            <li>
+                                                                <p>Pending Clearance</p>
+                                                                <h4>$300.00</h4>
+                                                            </li>
+                                                            <li>
+                                                                <p>Available for Withdrawal</p>
+                                                                <h4>$150.46</h4>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="table-price-mainbx1">
+                                                        <div class="table-price-mainbx2 scroll01">
+                                                            <div class="withdraw-btnbx01">
+                                                                <ul>
+                                                                    <li>Withdraw</li>
+                                                                    <li class="paypal-btn"><a href="#">Paypal</a></li>
+                                                                    <li><a href="#">Bank Transfer</a></li>
+                                                                    <li class="payoneer-btn"><a href="#">Payoneer</a></li>
+                                                                </ul>
+                                                                <p>Get Statement of Earning</p>
+                                                            </div>
+                                                            <div class="payment-table-bx1">
+                                                                <ul>
+                                                                    <li>
+                                                                        <form>
+                                                                            <div class="form-inputrow">
+                                                                                <div class="form-group formspace01">
+                                                                                    <select class="form-select">
+                                                                                        <option>Everything</option>
+                                                                                        <option>Option 1</option>
+                                                                                        <option>Option 2</option>
+                                                                                        <option>Option 3</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group formspace01">
+                                                                                    <div class="form-group">
+                                                                                        <select class="form-select">
+                                                                                            <option>2022</option>
+                                                                                            <option>Option 1</option>
+                                                                                            <option>Option 2</option>
+                                                                                            <option>Option 3</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group formspace01">
+                                                                                    <div class="form-group">
+                                                                                        <select class="form-select">
+                                                                                            <option>All months</option>
+                                                                                            <option>Option 1</option>
+                                                                                            <option>Option 2</option>
+                                                                                            <option>Option 3</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </li>
+                                                                    <li class="second-libx1">
+                                                                        <div class="price-tblebx11">
+                                                                            <p class="datebx1">Date</p>
+                                                                            <p class="forbx">For</p>
+                                                                            <p class="amountbx">Amount</p>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="price-tblebx11">
+                                                                            <p class="datebx1">Sep 22, 22</p>
+                                                                            <p class="forbx">Order Revenue</p>
+                                                                            <p class="amountbx">$70.56</p>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="price-tblebx11">
+                                                                            <p class="datebx1">Sep 22, 22</p>
+                                                                            <p class="forbx">Funds Cleared</p>
+                                                                            <p class="amountbx red-amount">-$70.56</p>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="price-tblebx11">
+                                                                            <p class="datebx1">Sep 22, 22</p>
+                                                                            <p class="forbx">Withdrawal Completed Successfully</p>
+                                                                            <p class="amountbx">$70.56</p>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="price-tblebx11">
+                                                                            <p class="datebx1">Sep 22, 22</p>
+                                                                            <p class="forbx">Order Revenue</p>
+                                                                            <p class="amountbx">$70.56</p>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="price-tblebx11">
+                                                                            <p class="datebx1">Sep 22, 22</p>
+                                                                            <p class="forbx">Funds Cleared</p>
+                                                                            <p class="amountbx red-amount">-$70.56</p>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="price-tblebx11">
+                                                                            <p class="datebx1">Sep 22, 22</p>
+                                                                            <p class="forbx">Withdrawal Completed Successfully</p>
+                                                                            <p class="amountbx">$70.56</p>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

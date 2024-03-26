@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/SelfEmploy-main.iml" filepath="$PROJECT_DIR$/.idea/SelfEmploy-main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/self_employ.iml" filepath="$PROJECT_DIR$/.idea/self_employ.iml" />
     </modules>
   </component>
 </project>
