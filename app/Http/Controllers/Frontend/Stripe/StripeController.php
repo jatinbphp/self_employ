@@ -11,6 +11,8 @@ use App\Models\UserBankAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Stripe\Stripe;
+use Stripe\Transfer;
 use Toastr;
 
 class StripeController extends Controller
@@ -28,6 +30,8 @@ class StripeController extends Controller
                 $sKey = env('STRIPE_SECRET');
                 $stripe = new \Stripe\StripeClient($sKey);
                 try{
+                    //$stripe->accounts->delete('acct_1OyXvU4JWYoHrjay', []);
+
                     $accountDetail = $stripe->accounts->retrieve($data['bankAccount']['stripe_account_id'], []);
                     $bankStatus = $accountDetail->payouts_enabled == false ? 0 : 1;
                 }catch(\Exception $e){
@@ -182,6 +186,47 @@ class StripeController extends Controller
             $data['status'] = 0;
             $data['message'] = 'Session timeout';
         }
+        return $data;
+    }
+
+    public function payout(Request $request){
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 2, 'errors' => $validator->errors()], 200);
+        }
+
+        $user = Auth::user();
+
+        if($request['amount'] > $user['balance']){
+            $data['status'] = 0;
+            $data['message'] = 'You have insufficient balance.';
+        }else{
+            $userBank = UserBankAccount::where('user_id',$user['id'])->first();
+            $country = StripeBankInputs::where('id',$userBank['country'])->first();
+            if(!empty($userBank)){
+                try{
+                    $sKey = env('STRIPE_SECRET');
+                    Stripe::setApiKey($sKey);
+                    $transfer = Transfer::create([
+                        'amount' => $request['amount'],
+                        //'currency' => $country['country_currency'],
+                        'currency' => 'sek',
+                        'destination' => $userBank['stripe_account_id'],
+                        'transfer_group' => 'Manually transfer to connect bank account',
+                    ]);
+                    return $transfer;
+                }catch(\Exception $e){
+                    return $e->getMessage();
+                }
+            }else{
+                $data['status'] = 0;
+                $data['message'] = 'Your bank account is not found';
+            }
+        }
+
         return $data;
     }
 }

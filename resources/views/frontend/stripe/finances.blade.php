@@ -329,13 +329,24 @@
                                                     <div class="table-price-mainbx1">
                                                         <div class="table-price-mainbx2 scroll01">
                                                             <div class="withdraw-btnbx01">
-                                                                <ul>
-                                                                    <li>Withdraw</li>
-                                                                    <li class="paypal-btn"><a href="#">Paypal</a></li>
-                                                                    <li><a href="#">Bank Transfer</a></li>
-                                                                    <li class="payoneer-btn"><a href="#">Payoneer</a></li>
-                                                                </ul>
-                                                                <p>Get Statement of Earning</p>
+                                                                <form id="withdrawForm" enctype="multipart/form-data">
+                                                                    <div class="form-spacebx1">
+                                                                        <div class="row mt-3">
+                                                                            <h4>Withdraw</h4>
+                                                                            <div class="col-md-6">
+                                                                                <input type="number" step="0.1" name="amount" class="form-control" id="withdrawAmt">
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <div class="submit-btnbx0">
+                                                                                    <button type="submit" class="btn btn-primary" value="Withdraw">Withdraw</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-12 ">
+                                                                                <p>Get Statement of Earning</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
                                                             </div>
                                                             <div class="payment-table-bx1">
                                                                 <ul>
@@ -535,6 +546,44 @@
                 submitHandler: function(form) {
                     $.ajax({
                         url: "{{ route('stripe.store.connectBankAccount') }}",
+                        type: 'POST',
+                        data: $(form).serialize(),
+                        success: function(response) {
+                            if (response.status == 1) {
+                                toastr.success(response.message, 'Success');
+                                window.location.reload();
+                            } else if (response.status == 2){
+                                var errors = response.errors;
+                                var i =1;
+                                $.each(errors, function(key, value) {
+                                    $('#error-' + key).text(value[0]);
+                                    if(i==1){
+                                        $('input[name="'+key+'"]').focus();
+                                    }
+                                    i++;
+                                });
+                            } else {
+                                toastr.error(response.message, 'Error');
+                            }
+                        }
+                    });
+                }
+            });
+
+            $("#withdrawForm").validate({
+                rules: {
+                    amount: {
+                        required: true
+                    }
+                },
+                messages: {
+                    amount: {
+                        required: "The amount field is required.",
+                    }
+                },
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: "{{ route('stripe.payout') }}",
                         type: 'POST',
                         data: $(form).serialize(),
                         success: function(response) {

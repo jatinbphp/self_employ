@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::post('stripe/saveConnectBankAccount', [StripeController::class, 'storeBankAccount'])->name('stripe.store.connectBankAccount');
     Route::post('stripe/getBankRequiredDetails', [StripeController::class, 'getBankRequiredDetails'])->name('stripe.getBankRequiredDetails');
     Route::post('stripe/linkGenerate', [StripeController::class, 'linkGenerate'])->name('stripe.linkGenerate');
+    Route::post('stripe/payout', [StripeController::class, 'payout'])->name('stripe.payout');
 
     //Portfolio
     Route::get('portfolio/{id?}', [PortfolioController::class, 'index'])->name('portfolio.index');
