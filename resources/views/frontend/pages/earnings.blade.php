@@ -133,11 +133,15 @@
                     }
                 },
                 submitHandler: function(form) {
+                    $('.mLoader').css('display', 'flex');
+
                     $.ajax({
                         url: "{{ route('stripe.payout') }}",
                         type: 'POST',
                         data: $(form).serialize(),
                         success: function(response) {
+                            $('.mLoader').css('display', 'none');
+                            
                             if (response.status == 1) {
                                 $('#payment-form')[0].reset();
                                 $('.userBalanceMenu').html('<b>$'+response.main_balance+' USD</b>');

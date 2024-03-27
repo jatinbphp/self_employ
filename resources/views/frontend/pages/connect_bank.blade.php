@@ -290,12 +290,15 @@
         }
 
         $('#verifyAccount').on('click', function(){
+            $('.mLoader').css('display', 'flex');
+
             $.ajax({
                 url: "{{ route('stripe.linkGenerate') }}",
                 type: 'POST',
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 success: function(response) {
-                    console.log(response);
+                    $('.mLoader').css('display', 'none');
+
                     if(response.status == 1){
                         window.location.href = response.url;
                     }else{

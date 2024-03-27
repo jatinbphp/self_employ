@@ -517,11 +517,15 @@
                     }
                 },
                 submitHandler: function(form) {
+                    $('.mLoader').css('display', 'flex');
+
                     $.ajax({
                         url: "{{ route('profile.profile_settings.update') }}",
                         type: 'POST',
                         data: $(form).serialize(),
                         success: function(response) {
+                            $('.mLoader').css('display', 'none');
+
                             if (response.status == 1) {
                                 toastr.success(response.message, 'Success');
                             } else if (response.status == 2){
@@ -573,11 +577,15 @@
                     }
                 },
                 submitHandler: function(form) {
+                    $('.mLoader').css('display', 'flex');
+
                     $.ajax({
                         url: "{{ route('profile.password.update') }}",
                         type: 'POST',
                         data: $(form).serialize(),
                         success: function(response) {
+                            $('.mLoader').css('display', 'none');
+                            
                             if (response.status == 1) {
                                 $(form)[0].reset();
                                 toastr.success(response.message,'Success');
@@ -620,11 +628,15 @@
                     }
                 },
                 submitHandler: function(form) {
+                    $('.mLoader').css('display', 'flex');
+
                     $.ajax({
                         url: "{{ route('profile.email.update') }}",
                         type: 'POST',
                         data: $(form).serialize(),
                         success: function(response) {
+                            $('.mLoader').css('display', 'none');
+
                             if (response.status == 1) {
                                 toastr.success(response.message, 'Success');
                             } else if (response.status == 2){
@@ -677,11 +689,15 @@
                     }
                 },
                 submitHandler: function(form) {
+                    $('.mLoader').css('display', 'flex');
+
                     $.ajax({
                         url: "{{ route('profile.card.add') }}",
                         type: 'POST',
                         data: $(form).serialize(),
                         success: function(response) {
+                            $('.mLoader').css('display', 'none');
+
                             if (response.status == 1) {
                                 $(form)[0].reset();
                                 toastr.success(response.message,'Success');

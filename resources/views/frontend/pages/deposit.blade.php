@@ -283,12 +283,15 @@
 		          	console.log($form.get(0));
 
 		          	//$form.get(0).submit();
+		          	$('.mLoader').css('display', 'flex');
 
                     $.ajax({
                         url: "{{ route('page.deposit.stripe') }}",
                         type: 'POST',
                         data: $('#payment-form').serialize(),
                         success: function(response) {
+                        	$('.mLoader').css('display', 'none');
+                        	
                             if (response.status == 1) {
                                 $('#payment-form')[0].reset();
                                 $('.userBalanceMenu').html('<b>$'+response.main_balance+' USD</b>');

@@ -30,7 +30,7 @@ class StripeController extends Controller
             /*$sKey = env('STRIPE_SECRET');
             $stripe = new \Stripe\StripeClient($sKey);
             //$all = $stripe->accounts->all(['limit' => 3]);
-            $stripe->accounts->delete('acct_1Oytrl4FBZLgS179', []);
+            $stripe->accounts->delete('acct_1OysoFQM5pmFyFDO', []);
             return 'Done';*/
 
             if(!empty($data['bankAccount'])){
@@ -231,7 +231,6 @@ class StripeController extends Controller
                 try {
                     $sKey = env('STRIPE_SECRET');
                     $stripe = new \Stripe\StripeClient($sKey);
-
                     $transfer = $stripe->transfers->create([
                         'amount' => floatval($request['amount']) * 100,
                         'currency' => $country['country_currency'],
@@ -246,8 +245,6 @@ class StripeController extends Controller
                             'description' =>  'Fund Withdrawal',
                             'type' =>  'stripe',
                             'payment_type' =>  'debit',
-                            'transaction_id' =>  $transfer['id'],
-                            'status' =>  'pending',
                         ]);
                         $user = User::where('id', $user['id'])->first();
                         $balance = floatval($user['balance']) -  floatval($request['amount']);
@@ -255,7 +252,7 @@ class StripeController extends Controller
 
                         $data['main_balance'] = $balance;
                         $data['status'] = 1;
-                        $data['message'] = 'Withdrawal amount is under process.';
+                        $data['message'] = 'The amount has been successfully deposited';
                     }else{
                         $data['status'] = 0;
                         $data['message'] = 'Something is wrong. Please tty again.';
