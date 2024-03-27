@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="post-task-title pricing-income-titlebx">
-                    <h3>Connect Bank Account With Stripe</h3>
+                    <h3>Connect Your Bank Account With Stripe</h3>
                 </div>
                 <div class="post-taskbx01 pricing-income-mainbx1">
                     @if($isAccount == 1)

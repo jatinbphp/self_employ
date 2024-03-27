@@ -12,7 +12,7 @@ class Transaction extends Model
 
     protected $table = "transaction";
 
-    protected $fillable = ["payment_type", "user_id", "amount", "description", "type"];
+    protected $fillable = ["payment_type", "user_id", "amount", "description", "type", "transaction_id", "status"];
 
     public function getDepositor()
     {

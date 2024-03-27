@@ -139,8 +139,10 @@
                         data: $(form).serialize(),
                         success: function(response) {
                             if (response.status == 1) {
-                                toastr.success(response.message, 'Success');
-                                window.location.reload();
+                                $('#payment-form')[0].reset();
+                                $('.userBalanceMenu').html('<b>$'+response.main_balance+' USD</b>');
+                                $('.userBalance').html('$'+response.main_balance+' USD');
+                                toastr.success(response.message,'Success');
                             } else if (response.status == 2){
                                 var errors = response.errors;
                                 var i =1;
@@ -152,7 +154,7 @@
                                     i++;
                                 });
                             } else {
-                                toastr.error(response.message, 'Error');
+                                toastr.error(response.message,'Error');
                             }
                         }
                     });

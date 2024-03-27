@@ -30,20 +30,22 @@ class PaymentController extends Controller
         $sKey = env('STRIPE_SECRET');
         Stripe\Stripe::setApiKey($sKey);
         try {
-            Stripe\Charge::create ([
+            $charge = Stripe\Charge::create ([
                 "amount" => floatval($amount)*100,
                 "currency" => "USD",
                 "source" => $request->stripeToken,
                 "description" => "This payment is testing purpose of self employee",
             ]);
-
             //Session::flash('success', 'Payment Successfull!');
+
             Transaction::create([
                 'user_id' => Auth::user()->id,
                 'amount' =>  $request->deposit_amount,
                 'description' =>  'Fund Added',
                 'type' =>  'stripe',
                 'payment_type' =>  'credit',
+                'transaction_id' =>  $charge['id'],
+                'status' =>  'success',
             ]);
             $user = User::where('id', Auth()->user()->id)->first();
             $balance = floatval($user->balance) +  floatval($amount);

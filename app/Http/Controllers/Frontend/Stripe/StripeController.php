@@ -30,7 +30,8 @@ class StripeController extends Controller
             /*$sKey = env('STRIPE_SECRET');
             $stripe = new \Stripe\StripeClient($sKey);
             //$all = $stripe->accounts->all(['limit' => 3]);
-            $stripe->accounts->delete('acct_1OyrLR4EFdwpIGKT', []);*/
+            $stripe->accounts->delete('acct_1OysoFQM5pmFyFDO', []);
+            return 'Done';*/
 
             if(!empty($data['bankAccount'])){
                 $sKey = env('STRIPE_SECRET');
@@ -197,8 +198,7 @@ class StripeController extends Controller
         return $data;
     }
 
-    public function payout(Request $request)
-    {
+    public function payout(Request $request){
         $validator = Validator::make($request->all(), [
             'amount' => 'required',
         ]);
@@ -218,35 +218,43 @@ class StripeController extends Controller
             if (!empty($userBank)) {
                 try {
                     $sKey = env('STRIPE_SECRET');
-                    //Stripe::setApiKey($sKey);
-
                     $stripe = new \Stripe\StripeClient($sKey);
-                    $ex = $stripe->transfers->create([
-                        'amount' => $request['amount'],
-                        'currency' => 'usd',
+                    $transfer = $stripe->transfers->create([
+                        'amount' => floatval($request['amount']) * 100,
+                        'currency' => $country['country_currency'],
+                        //'currency' => 'sek',
                         'destination' => $userBank['stripe_account_id'],
                         'transfer_group' => 'ORDER10',
                     ]);
+                    if(!empty($transfer)){
+                        Transaction::create([
+                            'user_id' => $user['id'],
+                            'amount' =>  $request['amount'],
+                            'description' =>  'Fund Withdrawal',
+                            'type' =>  'stripe',
+                            'payment_type' =>  'debit',
+                        ]);
+                        $user = User::where('id', $user['id'])->first();
+                        $balance = floatval($user['balance']) -  floatval($request['amount']);
+                        $user->update(['balance' => $balance ]);
 
-
-                    return $ex;
-
-                    $transfer = Transfer::create([
-                        'amount' => $request['amount'],
-                        //'currency' => $country['country_currency'],
-                        'currency' => 'sek',
-                        'destination' => $userBank['stripe_account_id'],
-                        'transfer_group' => 'Manually transfer to connect bank account',
-                    ]);
-                    return $transfer;
+                        $data['main_balance'] = $balance;
+                        $data['status'] = 1;
+                        $data['message'] = 'The amount has been successfully deposited';
+                    }else{
+                        $data['status'] = 0;
+                        $data['message'] = 'Something is wrong. Please tty again.';
+                    }
                 } catch (\Exception $e) {
-                    return $e->getMessage();
+                    $data['status'] = 0;
+                    $data['message'] = $e->getMessage();
                 }
             } else {
                 $data['status'] = 0;
                 $data['message'] = 'Your bank account is not found';
             }
         }
+        return $data;
     }
 
     public function withdraw_funds(){
