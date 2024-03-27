@@ -80,16 +80,9 @@ class LoginController extends Controller
                 ]);
 
                 if ($user->role_id == 2) {
-                    if($user->is_deactivate == 1){
-                        //Session::flush();
-                        Auth::logout();
-                        Toastr::error('Please contact to admin.', 'Account Deactivated!', ["positionClass" => "toast-top-right"]);
-                        return redirect()->back();
-                    }else{
-                        Toastr::success('Login Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-                        return redirect()->route('jobs.index');
-                        return redirect()->route('profile.profile_settings.index');
-                    }
+                    Toastr::success('Login Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+                    return redirect()->route('jobs.index');
+                    return redirect()->route('profile.profile_settings.index');
                 } else {
                     Auth::logout();
                     $request->session()->invalidate();
