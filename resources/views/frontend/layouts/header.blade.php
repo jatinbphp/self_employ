@@ -183,7 +183,7 @@
                                             <div class="profile-detail">
                                                 <h5>{{ !empty(auth()->user()->name) ? auth()->user()->name : auth()->user()->email }}
                                                 </h5>
-                                                <p>${{ !is_null(auth()->user()->balance) ?  auth()->user()->balance : 0}} USD</p>
+                                                <p class="userBalance">${{ !is_null(auth()->user()->balance) ?  auth()->user()->balance : 0}} USD</p>
                                             </div>
                                         </div>
                                     </button>
@@ -240,22 +240,22 @@
                                             <span><b>Finances</b></span>
                                             <ul class="p-0" style="list-style: none;">
                                                 <li>
-                                                    <a class="dropdown-item" href="{{route('stripe.finances')}}#bankAccount">
+                                                    <a class="dropdown-item" href="{{route('stripe.connectBankAccount')}}">
                                                         Connect Bank Account
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item">
-                                                        Balance: <b>${{ !is_null(auth()->user()->balance) ?  auth()->user()->balance : 0}} USD</b>
+                                                        Balance: <span class="userBalanceMenu"><b>${{ !is_null(auth()->user()->balance) ?  auth()->user()->balance : 0}} USD</b></span>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item" href="{{route('stripe.finances')}}#deposit">
+                                                    <a class="dropdown-item" href="{{route('page.deposit')}}">
                                                         Add Funds
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item" href="{{route('stripe.finances')}}#withdraw">
+                                                    <a class="dropdown-item" href="{{route('page.earnings')}}">
                                                         Withdraw Funds
                                                     </a>
                                                 </li>

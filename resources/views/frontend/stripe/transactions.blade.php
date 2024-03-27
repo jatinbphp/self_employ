@@ -12,7 +12,7 @@
             <div class="price-tblebx11">
                 <p class="datebx1">{{date('M d, y', strtotime($transaction->created_at))}}</p>
                 <p class="forbx">{{$transaction->description}}</p>
-                <p class="amountbx @if($isDebit) red-amount @endif">@if($isDebit) -@endif${{round($transaction->amount, 2)}}</p>
+                <p class="amountbx @if($isDebit) red-amount @endif">@if($isDebit) -@endif${{number_format($transaction->amount, 2)}}</p>
             </div>
         </li>
     @endforeach

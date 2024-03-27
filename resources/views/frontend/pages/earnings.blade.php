@@ -12,7 +12,7 @@
                         <ul>
                             <li>
                                 <p>Net Income</p>
-                                <h4>$3,116.06</h4>
+                                <h4>${{number_format($user['balance'],2)}}</h4>
                             </li>
                             <li>
                                 <p>Withdrawn</p>
@@ -31,13 +31,22 @@
                     <div class="table-price-mainbx1">
                         <div class="table-price-mainbx2 scroll01">
                             <div class="withdraw-btnbx01">
-                                <ul>
-                                    <li>Withdraw</li>
-                                    <li class="paypal-btn"><a href="#">Paypal</a></li>
-                                    <li><a href="#">Bank Transfer</a></li>
-                                    <li class="payoneer-btn"><a href="#">Payoneer</a></li>
-                                </ul>
-                                <p>Get Statement of Earning</p>
+                                <form id="withdrawForm" enctype="multipart/form-data">
+                                    <div class="row mt-3">
+                                        <h4>Withdraw</h4>
+                                        <div class="col-md-6">
+                                            <input type="number" step="0.1" name="amount" class="form-control" id="withdrawAmt">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="submit-btnbx0">
+                                                <button type="submit" class="btn btn-primary" value="Withdraw">Withdraw</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 ">
+                                            <p>Get Statement of Earning</p>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="payment-table-bx1">
                                 <ul>
@@ -45,85 +54,60 @@
                                         <form>
                                             <div class="form-inputrow">
                                                 <div class="form-group formspace01">
-                                                    <select class="form-select">
-                                                        <option>Everything</option>
-                                                        <option>Option 1</option>
-                                                        <option>Option 2</option>
-                                                        <option>Option 3</option>
+                                                    <select class="form-select filter-select" id="payment_type_filter">
+                                                        <option value="all">Everything</option>
+                                                        <option value="credit">Credited</option>
+                                                        <option value="debit">Debited</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group formspace01">
                                                     <div class="form-group">
-                                                        <select class="form-select">
-                                                            <option>2022</option>
-                                                            <option>Option 1</option>
-                                                            <option>Option 2</option>
-                                                            <option>Option 3</option>
+                                                        @php
+                                                            $currentYear = \Carbon\Carbon::now()->year;
+                                                        @endphp
+                                                        <select class="form-select filter-select" id="year_filter">
+                                                            @if(!empty($firstTransactionYear))
+                                                                @for ($year = $currentYear; $year >= $firstTransactionYear; $year--)
+                                                                    <option value="{{$year}}">{{ $year }}</option>
+                                                                @endfor
+                                                            @else
+                                                                <option value="{{$currentYear}}">{{ $currentYear }}</option>
+                                                            @endif
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group formspace01">
                                                     <div class="form-group">
-                                                        <select class="form-select">
-                                                            <option>All months</option>
-                                                            <option>Option 1</option>
-                                                            <option>Option 2</option>
-                                                            <option>Option 3</option>
+                                                        <select class="form-select filter-select" id="month_filter">
+                                                            <option value="all">All months</option>
+                                                            @php
+                                                                $months = [
+                                                                    'January' => 1,
+                                                                    'February' => 2,
+                                                                    'March' => 3,
+                                                                    'April' => 4,
+                                                                    'May' => 5,
+                                                                    'June' => 6,
+                                                                    'July' => 7,
+                                                                    'August' => 8,
+                                                                    'September' => 9,
+                                                                    'October' => 10,
+                                                                    'November' => 11,
+                                                                    'December' => 12,
+                                                                ];
+                                                            @endphp
+                                                            @foreach ($months as $name => $value)
+                                                                <option value="{{ $value }}">{{ $name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
                                     </li>
-                                    <li class="second-libx1">
-                                        <div class="price-tblebx11">
-                                            <p class="datebx1">Date</p>
-                                            <p class="forbx">For</p>
-                                            <p class="amountbx">Amount</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="price-tblebx11">
-                                            <p class="datebx1">Sep 22, 22</p>
-                                            <p class="forbx">Order Revenue</p>
-                                            <p class="amountbx">$70.56</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="price-tblebx11">
-                                            <p class="datebx1">Sep 22, 22</p>
-                                            <p class="forbx">Funds Cleared</p>
-                                            <p class="amountbx red-amount">-$70.56</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="price-tblebx11">
-                                            <p class="datebx1">Sep 22, 22</p>
-                                            <p class="forbx">Withdrawal Completed Successfully</p>
-                                            <p class="amountbx">$70.56</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="price-tblebx11">
-                                            <p class="datebx1">Sep 22, 22</p>
-                                            <p class="forbx">Order Revenue</p>
-                                            <p class="amountbx">$70.56</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="price-tblebx11">
-                                            <p class="datebx1">Sep 22, 22</p>
-                                            <p class="forbx">Funds Cleared</p>
-                                            <p class="amountbx red-amount">-$70.56</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="price-tblebx11">
-                                            <p class="datebx1">Sep 22, 22</p>
-                                            <p class="forbx">Withdrawal Completed Successfully</p>
-                                            <p class="amountbx">$70.56</p>
-                                        </div>
-                                    </li>
+                                    <div id="transactionData">
+                                        @include('frontend.stripe.transactions')
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -132,4 +116,65 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $("#withdrawForm").validate({
+                rules: {
+                    amount: {
+                        required: true
+                    }
+                },
+                messages: {
+                    amount: {
+                        required: "The amount field is required.",
+                    }
+                },
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: "{{ route('stripe.payout') }}",
+                        type: 'POST',
+                        data: $(form).serialize(),
+                        success: function(response) {
+                            if (response.status == 1) {
+                                toastr.success(response.message, 'Success');
+                                window.location.reload();
+                            } else if (response.status == 2){
+                                var errors = response.errors;
+                                var i =1;
+                                $.each(errors, function(key, value) {
+                                    $('#error-' + key).text(value[0]);
+                                    if(i==1){
+                                        $('input[name="'+key+'"]').focus();
+                                    }
+                                    i++;
+                                });
+                            } else {
+                                toastr.error(response.message, 'Error');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $('.filter-select').on('change', function () {
+            var paymentType = $('#payment_type_filter').val();
+            var year = $('#year_filter').val();
+            var month = $('#month_filter').val();
+
+            $.ajax({
+                url: "{{ route('stripe.filterTransactions') }}",
+                type: 'POST',
+                data: {paymentType : paymentType, year : year, month : month},
+                success: function(response) {
+                    if (response.status == 1) {
+                        $('#transactionData').html(response.renderTransactions);
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

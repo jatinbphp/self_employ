@@ -18,7 +18,7 @@ use Toastr;
 
 class StripeController extends Controller
 {
-    public function finances(){
+    public function connectBankAccount(){
         $id = Auth::user()->id;
         $data['user'] = User::where('id', $id)->first();
         if (!is_null($data['user'] )) {
@@ -26,6 +26,11 @@ class StripeController extends Controller
             $isAccount = 1;
             $data['bankCountry'] = StripeBankInputs::select('id','country_name')->orderBy('country_name','ASC')->get();
             $data['bankAccount'] = UserBankAccount::where('user_id',$id)->first();
+
+            /*$sKey = env('STRIPE_SECRET');
+            $stripe = new \Stripe\StripeClient($sKey);
+            //$all = $stripe->accounts->all(['limit' => 3]);
+            $stripe->accounts->delete('acct_1OyrLR4EFdwpIGKT', []);*/
 
             if(!empty($data['bankAccount'])){
                 $sKey = env('STRIPE_SECRET');
@@ -46,7 +51,7 @@ class StripeController extends Controller
             $data['isAccount'] = $isAccount;
             $data['transactions'] = Transaction::where('user_id', $id)->whereYear('created_at', date('Y'))->orderBy('id', 'desc')->get();
             $data['firstTransactionYear'] = Transaction::where('user_id', $id)->orderBy('created_at', 'asc')->selectRaw('YEAR(created_at) AS year')->value('year');
-            return view('frontend.stripe.finances', $data);
+            return view('frontend.pages.connect_bank', $data);
         }else {
             Toastr::error('User is not exist', 'Error', ["positionClass" => "toast-top-right"]);
             return back();
@@ -167,10 +172,10 @@ class StripeController extends Controller
                 $stripe = new \Stripe\StripeClient($sKey);
                 $accountLink = $stripe->accountLinks->create([
                     'account' => $userBank['stripe_account_id'],
-                   // 'refresh_url' => route('stripe.finances'),
-                    //'return_url' => route('stripe.finances'),
-                    'refresh_url' => 'https://google.com',
-                    'return_url' => 'https://google.com',
+                    'refresh_url' => route('stripe.connectBankAccount'),
+                    'return_url' => route('stripe.connectBankAccount'),
+                    //'refresh_url' => 'https://google.com',
+                    //'return_url' => 'https://google.com',
                     'type' => 'account_onboarding',
                 ]);
                 if(!empty($accountLink)){
@@ -213,7 +218,19 @@ class StripeController extends Controller
             if (!empty($userBank)) {
                 try {
                     $sKey = env('STRIPE_SECRET');
-                    Stripe::setApiKey($sKey);
+                    //Stripe::setApiKey($sKey);
+
+                    $stripe = new \Stripe\StripeClient($sKey);
+                    $ex = $stripe->transfers->create([
+                        'amount' => $request['amount'],
+                        'currency' => 'usd',
+                        'destination' => $userBank['stripe_account_id'],
+                        'transfer_group' => 'ORDER10',
+                    ]);
+
+
+                    return $ex;
+
                     $transfer = Transfer::create([
                         'amount' => $request['amount'],
                         //'currency' => $country['country_currency'],
@@ -229,6 +246,19 @@ class StripeController extends Controller
                 $data['status'] = 0;
                 $data['message'] = 'Your bank account is not found';
             }
+        }
+    }
+
+    public function withdraw_funds(){
+        $id = Auth::user()->id;
+        $data['user'] = User::where('id', $id)->first();
+        if (!is_null($data['user'] )) {
+            $data['transactions'] = Transaction::where('user_id', $id)->whereYear('created_at', date('Y'))->orderBy('id', 'desc')->get();
+            $data['firstTransactionYear'] = Transaction::where('user_id', $id)->orderBy('created_at', 'asc')->selectRaw('YEAR(created_at) AS year')->value('year');
+            return view('frontend.pages.earnings', $data);
+        }else {
+            Toastr::error('User is not exist', 'Error', ["positionClass" => "toast-top-right"]);
+            return back();
         }
     }
 

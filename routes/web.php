@@ -103,12 +103,18 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     Route::post('profile/account/deactivate', [ProfileSettingController::class, 'deactivate'])->name('profile.account.deactivate');
 
     /*---------Finances---------*/
-    Route::get('finances', [StripeController::class, 'finances'])->name('stripe.finances');
+    Route::get('connect-bank-account', [StripeController::class, 'connectBankAccount'])->name('stripe.connectBankAccount');
     Route::post('stripe/saveConnectBankAccount', [StripeController::class, 'storeBankAccount'])->name('stripe.store.connectBankAccount');
     Route::post('stripe/getBankRequiredDetails', [StripeController::class, 'getBankRequiredDetails'])->name('stripe.getBankRequiredDetails');
     Route::post('stripe/linkGenerate', [StripeController::class, 'linkGenerate'])->name('stripe.linkGenerate');
     Route::post('stripe/payout', [StripeController::class, 'payout'])->name('stripe.payout');
+
+    Route::get('add-funds', [PaymentController::class, 'index'])->name('page.deposit');
+    Route::post('deposit', [PaymentController::class, 'stripePost'])->name('page.deposit.stripe');
+
+    Route::get('withdraw-funds', [StripeController::class, 'withdraw_funds'])->name('page.earnings');
     Route::post('stripe/filterTransactions', [StripeController::class, 'filterTransactions'])->name('stripe.filterTransactions');
+
 
     //Portfolio
     Route::get('portfolio/{id?}', [PortfolioController::class, 'index'])->name('portfolio.index');
@@ -175,8 +181,7 @@ Route::group(['middleware' => ['auth', 'user']], function () {
     // Route::post('upload_file', [ChatController::class, 'uploadFile'])->name('chat.upload.file');
     // Route::post('chat_users', [ChatController::class, 'chatUsers'])->name('chat.chatUsers');
 
-    Route::get('deposit', [PaymentController::class, 'index'])->name('page.deposit');
-    Route::post('deposit', [PaymentController::class, 'stripePost'])->name('page.deposit.stripe');
+
 
 });
 
@@ -223,7 +228,7 @@ Route::get('projects', [SelfEmployeeController::class, 'projects'])->name('proje
 Route::get('faqs', [FaqController::class, 'index'])->name('page.faqs');
 Route::get('selfemployment', [SelfEmployeeController::class, 'why_self_employee'])->name('page.why.self.employee');
 Route::get('howitworks', [SelfEmployeeController::class, 'how_works'])->name('page.how.it.works');
-Route::get('earnings', [SelfEmployeeController::class, 'earnings'])->name('page.earnings');
+//Route::get('earnings', [SelfEmployeeController::class, 'earnings'])->name('page.earnings');
 Route::get('supports', [SelfEmployeeController::class, 'support'])->name('page.support');
 Route::post('searchSupports', [SelfEmployeeController::class, 'searchSupports'])->name('page.searchSupports');
 Route::get('categories', [SelfEmployeeController::class, 'categories'])->name('page.categories');

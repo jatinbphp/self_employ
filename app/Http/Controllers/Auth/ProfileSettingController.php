@@ -228,7 +228,7 @@ class ProfileSettingController extends Controller
         $validator = Validator::make($request->all(), [
             'old_password' => 'required',
             'password' => 'required|confirmed|min:6',
-            'confirmed' => 'required|min:6',
+            'password_confirmation' => 'required|min:6',
         ]);
 
         if ($validator->fails()) {

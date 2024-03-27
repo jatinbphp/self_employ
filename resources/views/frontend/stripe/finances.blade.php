@@ -43,97 +43,7 @@
                                             @endif
                                         @endif
 
-                                        <form id="connectBankForm" enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="form-spacebx1">
-                                                <p>Select Business Type</p>
-                                                <div class="form-group">
-                                                    @foreach(\App\Models\User::$businessType as $key => $btype)
-                                                        @php
-                                                                $checked = isset($bankAccount) && $bankAccount['business_type'] == $key ? 'checked' : '';
-                                                        @endphp
-                                                        <input type="radio" name="business_type" {{$checked}} value="{{$key}}" style="height: unset!important; min-height: unset!important;">
-                                                        <span style="@if($key == "individual") margin-right:10px; @endif">{{ $btype }}</span>
-                                                    @endforeach
-                                                     <br><span class="text-danger" id="error-business_type"></span>
-                                                </div>
 
-                                                <div class="form-inputrow">
-                                                    <div class="form-group formspace02">
-                                                        <p>First Name</p>
-                                                        <input type="text" name="first_name" value="{{auth()->user()->first_name}}" class="form-control form-control-lg" placeholder="First Name">
-                                                        <span class="text-danger" id="error-first_name"></span>
-                                                    </div>
-                                                    <div class="form-group formspace02">
-                                                        <p>Last Name</p>
-                                                        <input type="text" name="last_name" value="{{auth()->user()->last_name}}" class="form-control form-control-lg" placeholder="Last Name">
-                                                        <span class="text-danger" id="error-last_name"></span>
-                                                    </div>
-                                                </div>
-
-                                                <p>Bank Country</p>
-                                                <div class="form-group">
-                                                    <select name="bank_country" id="bankCountry" class="form-select select2">
-                                                        <option value="">Select Country</option>
-                                                        @if(count($bankCountry) > 0)
-                                                            @foreach($bankCountry as $list)
-                                                                @php
-                                                                        $selected =  isset($bankAccount) &&  $bankAccount['country'] == $list['id'] ? 'selected' : '';
-                                                                @endphp
-                                                                <option value="{{$list['id']}}" {{$selected}}>{{$list['country_name']}}</option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                    <span class="text-danger" id="error-bank_country"></span>
-                                                </div>
-
-                                                <p>Address</p>
-                                                <div class="form-group">
-                                                    <input type="text" name="address" value="{{isset($bankAccount) ? $bankAccount['address'] : '' }}" class="form-control form-control-lg" placeholder="Address">
-                                                    <span class="text-danger" id="error-address"></span>
-                                                </div>
-                                                <p>City/Town</p>
-                                                <div class="form-group">
-                                                    <input type="text" name="city" value="{{isset($bankAccount) ? $bankAccount['city'] : '' }}" class="form-control form-control-lg" placeholder="City">
-                                                    <span class="text-danger" id="error-city"></span>
-                                                </div>
-                                                <div class="form-inputrow">
-                                                    <div class="form-group formspace02">
-                                                        <p>ZIP/Postal Code</p>
-                                                        <input type="text" name="zip_code" value="{{isset($bankAccount) ? $bankAccount['zip_code'] : '' }}" class="form-control form-control-lg" placeholder="Zip/Postal Code">
-                                                        <span class="text-danger" id="error-zip_code"></span>
-                                                    </div>
-                                                    <div class="form-group formspace02">
-                                                        <p>State/Region</p>
-                                                        <input type="text" name="state" value="{{isset($bankAccount) ? $bankAccount['state'] : '' }}" class="form-control form-control-lg" placeholder="State">
-                                                        <span class="text-danger" id="error-state"></span>
-                                                    </div>
-                                                </div>
-
-                                                <p>Bank Account Holder Name</p>
-                                                <div class="form-group">
-                                                    <input type="text" name="bank_holder_name" value="{{isset($bankAccount) ? $bankAccount['bank_holder_name'] : '' }}" class="form-control form-control-lg" placeholder="Bank Account Holder Name">
-                                                    <span class="text-danger" id="error-bank_holder_name"></span>
-                                                </div>
-                                                <input type="hidden" name="min" id="min">
-                                                <input type="hidden" name="max" id="max">
-                                                <div class="form-inputrow" id="dynamicFields">
-                                                    <div class="form-group formspace02">
-                                                        <p>Bank Account Number</p>
-                                                        <input type="text" name="bank_account_number" data-name="Bank Account Number" id="bankDetail_0" value="{{isset($bankAccount) ? $bankAccount['bank_account_number'] : '' }}" class="form-control form-control-lg" placeholder="Bank Account Number">
-                                                        <span class="text-danger" id="error-bank_account_number"></span>
-                                                    </div>
-                                                    <div class="form-group formspace02" id="specialNumber">
-                                                        <p>Bank Routing Number</p>
-                                                        <input type="text" name="routing_number" data-name="Bank Routing Number" id="bankDetail_1" value="{{isset($bankAccount) ? $bankAccount['bank_routing_number'] : '' }}" class="form-control form-control-lg" placeholder="Bank Routing Number">
-                                                        <span class="text-danger" id="error-routing_number"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="submit-btnbx0">
-                                                    <button type="submit" class="btn btn-primary" name="update" value="update">Submit</button>
-                                                </div>
-                                            </div>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -429,24 +339,7 @@
 @section('script')
     <script type="text/javascript" src="https://js.stripe.com/v1/"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log('DOMContentLoaded');
-            // Check if there's a hash fragment in the URL
-            if (window.location.hash) {
-                console.log('inn hash');
-                const hash = window.location.hash.substring(1); // Remove the '#' character
-                const tab = document.querySelector(`#${hash}Tab`);
-                if (tab) {
-                    $('.bankAccount').removeClass('active');
-                    $('.tab-pane').removeClass('show active');
-                    tab.classList.add('active'); // Ensure the tab button is marked as active
-                    const tabContent = document.querySelector(tab.getAttribute('data-bs-target'));
-                    if (tabContent) {
-                        tabContent.classList.add('show', 'active'); // Show and mark as active the corresponding tab content
-                    }
-                }
-            }
-        });
+
 
         $(document).ready(function() {
             /*Connect Bank Account Validation*/
@@ -643,7 +536,6 @@
         // input event only fires if there is space in the input for entry.
         // If an input of x length has x characters, keyboard press will not fire this input event.
         monthInput.addEventListener('input', (event) => {
-
             const value = event.target.value.toString();
             // adds 0 to month user input like 9 -> 09
             if (value.length === 1 && value > 1) {

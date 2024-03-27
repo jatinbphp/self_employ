@@ -88,7 +88,6 @@
 					                  	<div class="panel-heading" >
 					                     	<div class="row">
 					                        	<h4>Payment Details</h4>
-
 					                     	</div>
 					                  </div>
 					                  <div class="panel-body">
@@ -111,7 +110,7 @@
 						                           </div>
 						                           <div class='col-xs-12 col-md-6 form-group required'>
 						                              	<label class='control-label'>Card Number</label>
-						                              	<input autocomplete='off' class='form-control card-number' size='20' type='text'>
+						                              	<input autocomplete='off' class='form-control card-number' size='20' type='text' value="{{$userCard['card_number']}}">
 						                           </div>
 						                        </div>
 						                        <div class='form-row row'>
@@ -122,8 +121,8 @@
 						                           <div class='col-xs-12 col-md-4 form-group expiration required'>
 						                              	<label class='control-label'>Expiration date</label>
 						                              	<div class="exp-wrapper">
-														  	<input autocomplete="off" class="exp card-expiry-month" id="month" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="MM" type="text" data-pattern-validate />
-														  	<input autocomplete="off" class="exp card-expiry-year" id="year" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="YY" type="text" data-pattern-validate />
+														  	<input autocomplete="off" class="exp card-expiry-month" id="month" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="MM" type="text" value="{{isset($expMnt[0]) && !empty($expMnt[0]) ? $expMnt[0] : ''}}" data-pattern-validate />
+														  	<input autocomplete="off" class="exp card-expiry-year" id="year" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="YY" type="text" value="{{isset($expMnt[1]) && !empty($expMnt[1]) ? $expMnt[1] : ''}}" data-pattern-validate />
 														</div>
 						                           </div>
 						                           <!-- <div class='col-xs-12 col-md-4 form-group expiration required'>
@@ -283,7 +282,23 @@
 		          	$form.append("<input type='hidden' name='deposit_amount' value='" + amount + "'/>");
 		          	console.log($form.get(0));
 
-		          	$form.get(0).submit();
+		          	//$form.get(0).submit();
+
+                    $.ajax({
+                        url: "{{ route('page.deposit.stripe') }}",
+                        type: 'POST',
+                        data: $('#payment-form').serialize(),
+                        success: function(response) {
+                            if (response.status == 1) {
+                                $('#payment-form')[0].reset();
+                                $('.userBalanceMenu').html('<b>$'+response.main_balance+' USD</b>');
+                                $('.userBalance').html('$'+response.main_balance+' USD');
+                                toastr.success(response.message,'Success');
+                            }else {
+                                toastr.error(response.message,'Error');
+                            }
+                        }
+                    });
 		      	}
 	  		} else {
 	  			$('.error')

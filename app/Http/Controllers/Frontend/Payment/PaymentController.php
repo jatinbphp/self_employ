@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserCards;
 use Illuminate\Http\Request;
 // use Session;
 use Illuminate\Support\Facades\Session;
@@ -16,7 +17,10 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        return view('frontend.pages.deposit');
+        $user = Auth::user();
+        $data['userCard'] = UserCards::where('user_id',$user['id'])->latest()->first();
+        $data['expMnt'] = !empty($data['userCard']) ? explode('/',$data['userCard']['expiry_month']) : [];
+        return view('frontend.pages.deposit', $data);
     }
 
     public function stripePost(Request $request)
@@ -33,7 +37,7 @@ class PaymentController extends Controller
                 "description" => "This payment is testing purpose of self employee",
             ]);
 
-            Session::flash('success', 'Payment Successfull!');
+            //Session::flash('success', 'Payment Successfull!');
             Transaction::create([
                 'user_id' => Auth::user()->id,
                 'amount' =>  $request->deposit_amount,
