@@ -288,4 +288,9 @@ class User extends Authenticatable
     {
         $this->attributes['email'] = strtolower($value);
     }
+
+    public function bank_account()
+    {
+        return $this->hasOne(UserBankAccount::class, 'user_id');
+    }
 }

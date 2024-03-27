@@ -212,12 +212,15 @@
                     //$('#connectBankForm :input').prop('disabled', true);
                     $('#connectBankBtn').html('Please Wait...');
                     $('#connectBankBtn').prop('disabled', true);
+                    $('.mLoader').css('display', 'flex');
 
                     $.ajax({
                         url: "{{ route('stripe.store.connectBankAccount') }}",
                         type: 'POST',
                         data: $(form).serialize(),
                         success: function(response) {
+                            $('.mLoader').css('display', 'none');
+
                             if (response.status == 1) {
                                 toastr.success(response.message, 'Success');
                                 window.location.reload();
