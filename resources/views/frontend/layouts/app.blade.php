@@ -51,6 +51,11 @@
 
     <!-- Include main Content Section -->
     @yield('content')
+
+    <div class="mLoader" style=" display: none; ">
+        <div class="loader4"></div>
+    </div>
+
     <div id="chat-overlay" class="row"></div>
 
     <audio id="chat-alert-sound" style="display: none" >

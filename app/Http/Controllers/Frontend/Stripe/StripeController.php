@@ -101,10 +101,21 @@ class StripeController extends Controller
         }
 
         $user = Auth::user();
+        //$user = User::with('bank_account')->where('id', Auth::user()->id)->first();
         $country = StripeBankInputs::where('id',$request['bank_country'])->first();
+
         try{
             $sKey = env('STRIPE_SECRET');
             $stripe = new \Stripe\StripeClient($sKey);
+
+            /*$user_exist = 0;
+            if(!empty($user->bank_account->stripe_account_id)){
+                $account = $stripe->accounts->retrieve($user->bank_account->stripe_account_id);
+                if(!empty($account)){
+                    $user_exist = 1;
+                }
+            }*/
+            
 
             /*Get All Connect Account*/
             $allAccount = $stripe->accounts->all(['limit' => 3]);
@@ -123,6 +134,7 @@ class StripeController extends Controller
                         'transfers' => ['requested' => true],
                     ],
                 ]);
+
             if(!empty($response)){
                 /*-----------Connect Bank Account In Stripe Code-----------*/
                 $bankResponse = $stripe->tokens->create([

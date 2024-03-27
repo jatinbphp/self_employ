@@ -5477,3 +5477,15 @@ input.exp {
 .stellarnav.desktop>ul>li.mega>ul>li>a {
     font-weight: 600;
 }
+@keyframes loader4 {
+            from{transform:rotate(0deg)}
+            to{transform:rotate(360deg)}
+        }
+
+        @-webkit-keyframes loader4 {
+            from{-webkit-transform:rotate(0deg)}
+            to{-webkit-transform:rotate(360deg)}
+        }
+
+        .loader4{width:45px;height:45px;display:inline-block;padding:0;border-radius:100%;border:5px solid;-webkit-animation:loader4 1s ease-in-out infinite;animation:loader4 1s ease-in-out infinite;position:relative;z-index:999;border-color:#050005 #d3d3d3 #d3d3d3 #050005}
+        .mLoader{position:fixed;height:100%;top:0;left:0;width:100%;display:flex;justify-content:center;align-items:center;background:rgba(0, 0, 0, 0.5);z-index:99}
