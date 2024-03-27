@@ -139,9 +139,10 @@
                         data: $(form).serialize(),
                         success: function(response) {
                             if (response.status == 1) {
-                                $('#payment-form')[0].reset();
+                                $('#withdrawForm')[0].reset();
                                 $('.userBalanceMenu').html('<b>$'+response.main_balance+' USD</b>');
                                 $('.userBalance').html('$'+response.main_balance+' USD');
+                                $('#transactionData').html(response.renderTransactions);
                                 toastr.success(response.message,'Success');
                             } else if (response.status == 2){
                                 var errors = response.errors;

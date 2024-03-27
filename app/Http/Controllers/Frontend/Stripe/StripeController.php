@@ -222,8 +222,7 @@ class StripeController extends Controller
 
                     $transfer = $stripe->transfers->create([
                         'amount' => floatval($request['amount']) * 100,
-                        'currency' => $country['country_currency'],
-                        //'currency' => 'sek',
+                        'currency' => 'sek',
                         'destination' => $userBank['stripe_account_id'],
                         'transfer_group' => 'ORDER10',
                     ]);
@@ -241,23 +240,29 @@ class StripeController extends Controller
                         $balance = floatval($user['balance']) -  floatval($request['amount']);
                         $user->update(['balance' => $balance ]);
 
+                        $transactionCollection = Transaction::where('user_id', $user['id'])->orderBy('id', 'desc')->get();
+                        $transaction['transactions'] = $transactionCollection;
+                        $data['renderTransactions'] = view('frontend.stripe.transactions', $transaction)->render();
                         $data['main_balance'] = $balance;
                         $data['status'] = 1;
                         $data['message'] = 'Withdrawal amount is under process.';
+                        return $data;
                     }else{
                         $data['status'] = 0;
                         $data['message'] = 'Something is wrong. Please tty again.';
+                        return $data;
                     }
                 } catch (\Exception $e) {
                     $data['status'] = 0;
                     $data['message'] = $e->getMessage();
+                    return $data;
                 }
             } else {
                 $data['status'] = 0;
                 $data['message'] = 'Your bank account is not found';
+                return $data;
             }
         }
-        return $data;
     }
 
     public function withdraw_funds(){
