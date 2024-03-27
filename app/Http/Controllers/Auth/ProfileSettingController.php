@@ -320,7 +320,7 @@ class ProfileSettingController extends Controller
         $user = User::where('id',Auth::user()->id)->first();
         if(!empty($user)){
             $input['is_deactivate'] = 1;
-            $input['status'] = 'inactive';
+            $input['status'] = 'active';
             $user->update($input);
             return 1;
         }else{
